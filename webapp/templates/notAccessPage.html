@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Немає прав доступу</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+
+        h1 {
+            color: #ff0000; /* Червоний колір тексту */
+        }
+
+        .home-button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #54913a; /* Синій колір фону */
+            color: #131010; /* Білий колір тексту */
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<h1>Немає прав доступу</h1>
+<p>Вибачте, у вас немає прав доступу до цієї сторінки.</p>
+<a class="home-button" onclick="goHome()">На головну сторінку</a>
+<script>
+    function goHome() {
+        window.location.href = '/home';
+    }
+</script>
+
+</body>
+
+</html>

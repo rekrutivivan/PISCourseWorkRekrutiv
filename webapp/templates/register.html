@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Реєстрація</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 300px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        input {
+            padding: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        button {
+            padding: 5px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .err_alertDisplay {
+            color: #721c24;
+            background-color: #f8d7da;
+            padding: 10px;
+            border: 1px solid #f5c6cb;
+            border-radius: 3px;
+            margin-bottom: 10px;
+        }
+
+
+        button.return-to-login {
+            margin: 10px;
+
+            display: block;
+            padding: 10px; /* Add padding for better visual appearance */
+            background-color: #ccc;
+            color: #333;
+        }
+
+        button.return-to-login:hover {
+            background-color: #999;
+        }
+
+        .success_alertDisplay {
+            color: #181616;
+            background-color: #28a745;
+            padding: 10px;
+            border: 1px solid #54913a;
+            border-radius: 3px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <h2>Реєстрація</h2>
+
+    {% if success_message %}
+    <div class="success_alertDisplay">
+        <ul>
+            <li>{{ message }}</li>
+        </ul>
+    </div>
+    {% endif %}
+
+
+    {% if error_message %}
+    <div class="err_alertDisplay">
+        <ul>
+            <li>{{ message }}</li>
+        </ul>
+    </div>
+    {% endif %}
+
+    <form action="/register" method="post">
+        <label for="email">Пошта:</label>
+        <input id="email" name="email" required type="email" value="{{ email }}">
+
+        <label for="password">Пароль:</label>
+        <input id="password" name="password" required type="password" value="{{ password }}">
+
+        <label for="name">Ім'я:</label>
+        <input id="name" name="name" required type="text" value="{{ name }}">
+
+        <label for="surname">Прізвище:</label>
+        <input id="surname" name="surname" required type="text" value="{{ surname }}">
+
+        <button type="submit">Реєстрація</button>
+    </form>
+    {% if show_back_button %}
+    <button class="return-to-login" onclick="returnToLoginPage()">Повернутись до входу</button>
+    {% endif %}
+</div>
+
+<script>
+    function returnToLoginPage() {
+        window.location.href = '/login';
+    }
+</script>
+</body>
+
+</html>

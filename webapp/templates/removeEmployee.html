@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Your Web Application</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        nav {
+            background-color: #4CAF50;
+            overflow: hidden;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            cursor: pointer;
+            margin-right: 20px;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+            background-color: #4CAF50;
+        }
+
+        nav a:hover {
+            background-color: #fff;
+            color: #4CAF50;
+        }
+
+
+        .block {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .show-hide-btn {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            position: absolute;
+            top: 30px;
+            right: 10px;
+        }
+
+        .show-hide-btn:hover {
+            background-color: #45a049;
+        }
+
+
+        .block h2 {
+            margin-bottom: 10px;
+        }
+
+        @media only screen and (max-width: 600px) {
+            nav {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            nav a {
+                margin: 10px 0;
+            }
+        }
+
+        .content_bar {
+            display: flex;
+            justify-content: space-between;
+            border: #4CAF50 solid 5px;
+            margin: 5px;
+            padding: 5px;
+            padding-left: 10px;
+            padding-right: 10px;
+            border-radius: 10px;
+        }
+
+        .parameters_wrapper {
+            display: flex;
+        }
+
+        .content_bar_details {
+            padding-right: 5px;
+            padding-left: 5px;
+        }
+
+        .delete-form {
+            text-align: center;
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            width: 20%; /* Adjust the width as needed */
+            box-sizing: border-box; /* Include padding and border in the width */
+        }
+
+        .delete-form label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .delete-form input[type="text"] {
+            padding: 8px;
+            margin-bottom: 15px;
+            width: 100%; /* Take up full width within the form */
+            box-sizing: border-box; /* Include padding and border in the width */
+        }
+
+        .delete-btn {
+            background-color: #ff0000;
+            color: #fff;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .delete-btn:hover {
+            background-color: #cc0000;
+        }
+
+        .wrapper {
+            text-align: center;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border: 1px solid #f5c6cb;
+            border-radius: 3px;
+            margin-bottom: 10px;
+        }
+
+
+        .success_alertDisplay {
+            color: #181616;
+            background-color: #28a745;
+            padding: 10px;
+            border: 1px solid #54913a;
+            border-radius: 3px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<nav>
+    <div>
+        <a onclick="returnToHome()">Назад</a>
+    </div>
+</nav>
+<div class="wrapper">
+    <div class="delete-form">
+        {% if success_message %}
+        <div class="success_alertDisplay">
+            <ul>
+                <li>{{ success_message }}</li>
+            </ul>
+        </div>
+        {% endif %}
+        {% if message %}
+        <div class="alert alert-danger" id="alert-danger">
+            <li>{{ message }}</li>
+        </div>
+        {% endif %}
+
+        <form action="/removeEmployee" id="removeEmployeeForm" method="post">
+            <label for="employeeEmail">Введіть email працівника:</label>
+            <input id="employeeEmail" name="employeeEmail" placeholder="Email" type="text">
+            <button class="delete-btn" onclick="confirmDelete()">Видалити працівника</button>
+        </form>
+
+    </div>
+</div>
+<div class="block" id="allEmployeesBlock">
+    <h2>Працівники</h2>
+    <button class="show-hide-btn" onclick="toggleEmployeesList()">Показати/Сховати працівників</button>
+    <div class="employee_list">
+        {% for employee in all_employees %}
+        <div class="content_bar ">
+            <div class="parameters_wrapper">
+                <p class="content_bar_details"> Name: {{ employee.name }} |</p>
+                <p class="content_bar_details"> Surname: {{employee.surname}} |</p>
+                <p class="content_bar_details"> Email: {{ employee.email }}</p>
+            </div>
+            {% if employee.is_owner %}
+            <div class="content_bar_details owner">Owner</div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<script>
+    function toggleEmployeesList() {
+        var employeeList = document.querySelector('.employee_list');
+        var currentDisplay = window.getComputedStyle(employeeList).display;
+        employeeList.style.display = currentDisplay === 'none' || currentDisplay === '' ? 'block' : 'none';
+    }
+
+
+    function confirmDelete() {
+        var userEmail = document.getElementById('employeeEmail').value;
+
+        if (!userEmail) {
+            alert("Ви не ввели значення пошти");
+        } else {
+            var confirmed = confirm('Ви впевнені, що хочете видалити користувача з email: ' + userEmail + '?');
+        }
+
+        if (confirmed) {
+            document.getElementById('removeEmployeeForm').submit();
+        }
+    }
+
+    function returnToHome() {
+        window.location.href = '/home'
+    }
+</script>
+</body>
+
+</html>

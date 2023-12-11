@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Створити Звіт</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #wrapper {
+            max-width: 400px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        form {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        #returnButton {
+            background-color: #808080;
+        }
+
+        .success_alertDisplay {
+            color: #181616;
+            background-color: #28a745;
+            padding: 10px;
+            border: 1px solid #54913a;
+            border-radius: 3px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="wrapper">
+    <form action="/addReport" method="post">
+        <h1>Створити Звіт</h1>
+        {% if success_message %}
+        <div class="success_alertDisplay">
+            <ul>
+                <li>{{ success_message }}</li>
+            </ul>
+        </div>
+        {% endif %}
+        <label for="name">Ім'я:</label>
+        <input id="name" name="name" required type="text">
+
+        <label for="description">Опис:</label>
+        <textarea id="description" name="description" required></textarea>
+
+        <label for="diagram_type">Тип Діаграми:</label>
+        <select id="diagram_type" name="diagram_type" required>
+            <option value="line">Лінійна</option>
+        </select>
+
+        <label for="diagram_start_date">Дата початку Діаграми:</label>
+        <input id="diagram_start_date" name="diagram_start_date" required type="date">
+
+        <label for="diagram_end_date">Дата завершення Діаграми:</label>
+        <input id="diagram_end_date" name="diagram_end_date" required type="date">
+
+        <button type="submit">Створити Звіт</button>
+        <button id="returnButton" onclick="returnToPage()" type="button">Повернутися до сторінки</button>
+    </form>
+</div>
+
+<script>
+    function returnToPage() {
+        window.location.href = '/reportPage';
+    }
+</script>
+
+</body>
+</html>

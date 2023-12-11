@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Login Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 300px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        input {
+            padding: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        button {
+            padding: 5px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .register-link .register-button {
+            padding: 5px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border: 1px solid #f5c6cb;
+            border-radius: 3px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <h2>Вхід</h2>
+    {% if message %}
+    <div class="alert alert-danger" id="alert-danger">
+        <li>{{ message }}</li>
+    </div>
+    {% endif %}
+
+    <form method="post" onsubmit="login()">
+        <label for="email">Пошта:</label>
+        <input id="email" name="email" required type="text" value="{{email}}">
+
+        <label for="password">Пароль:</label>
+        <input id="password" name="password" required type="password" value="{{password}}">
+
+        <button type="submit">Вхід</button>
+    </form>
+
+    <p style="text-align: center; margin-top: 10px;">чи</p>
+    <div class="register-link">
+        <p><a class="register-button" href="/register" onclick="reqiesterPage()">Реєстрація</a></p>
+    </div>
+</div>
+</body>
+
+<script>
+    function login() {
+        window.location.href = '/home';
+    }
+
+    function reqiesterPage() {
+        // Replace '/your-api-endpoint' with your actual FastAPI endpoint
+        const apiEndpoint = '/register';
+
+        fetch(apiEndpoint, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                // Add any additional headers if needed
+            },
+            // Add any additional options if needed
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('GET request successful', data);
+
+            })
+            .catch(error => {
+                console.error('Error during GET request', error);
+                // Handle errors (e.g., display an error message)
+            });
+    }
+
+
+</script>
+</html>

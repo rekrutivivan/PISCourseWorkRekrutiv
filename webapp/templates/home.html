@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Your Web Application</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        nav {
+            background-color: #4CAF50;
+            overflow: hidden;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            cursor: pointer;
+            margin-right: 20px;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+            background-color: #4CAF50;
+        }
+
+        nav a:hover {
+            background-color: #fff;
+            color: #4CAF50;
+        }
+
+        .content {
+            margin: 20px;
+        }
+
+        .block {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative; /* Make the block container relative */
+        }
+
+        .show-hide-btn {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            position: absolute; /* Make the button position absolute within the relative container */
+            top: 30px;
+            right: 10px;
+
+        }
+
+        .show-hide-btn:hover {
+            background-color: #45a049;
+        }
+
+        .owner {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px;
+            border: 1px solid #4CAF50;
+            border-radius: 10px;
+        }
+
+        .block h2 {
+            margin-bottom: 10px; /* Add margin to the h2 element to provide space for the button */
+        }
+
+        @media only screen and (max-width: 600px) {
+            nav {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            nav a {
+                margin: 10px 0;
+            }
+        }
+
+        .content_bar {
+            display: flex;
+            justify-content: space-between;
+            border: #4CAF50 solid 5px;
+            margin: 5px;
+            padding: 5px;
+            padding-left: 10px;
+            padding-right: 10px;
+            border-radius: 10px;
+        }
+
+        .parameters_wrapper {
+            display: flex;
+        }
+
+        .content_bar_details {
+            padding-right: 5px;
+            padding-left: 5px;
+        }
+
+        #currentEmployee_email {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<nav>
+    <div>
+        {% if access_rights.create_transactions %}
+        <a onclick="transactionPage()">Додати транзакцію</a>
+        {% endif %}
+        {% if current_employee.is_owner %}
+        <a onclick="addEmployeePage()">Додати працівника</a>
+        {% endif %}
+        {% if current_employee.is_owner %}
+        <a onclick="removeEmployeePage()">Видалити працівника</a>
+        {% endif %}
+        {% if access_rights.generate_report %}
+        <a onclick="getReportPage()">Звіти</a>
+        {% endif %}
+
+    </div>
+    <div>
+        <span class="userInfo"
+              style="margin-right: 20px;">{{current_employee.email}} | {{current_employee.name}} {{current_employee.surname}}</span>
+        <a href="#" onclick="logout()">Вихід</a>
+    </div>
+</nav>
+
+
+{% if access_rights.view_transactions %}
+<div class="content">
+    <div class="block" id="transactionsBlock">
+        <h2>Транзакції</h2>
+        <button class="show-hide-btn" onclick="toggleTransactionsList()">Показати/Сховати транзакції</button>
+        <div class="transaction_list">
+            {% for transaction in transactions %}
+            <div class="content_bar ">
+                <div class="parameters_wrapper">
+                    <p class="content_bar_details">ID: {{ transaction.id }} |</p>
+                    <p class="content_bar_details"> Type: {{ transaction.transaction_type}} |</p>
+                    <p class="content_bar_details">Amount: {{ transaction.amount }}</p>
+                </div>
+                <p class="content_bar_details"> Created at: {{ transaction.date }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    <div class="block" id="allEmployeesBlock">
+        <h2>Працівники</h2>
+        <button class="show-hide-btn" onclick="toggleEmployeesList()">Показати/Сховати працівників</button>
+        <div class="employee_list">
+            {% for employee in all_employees %}
+            <div class="content_bar ">
+                <div class="parameters_wrapper">
+                    <p class="content_bar_details"> Ім'я: {{ employee.name }} |</p>
+                    <p class="content_bar_details"> Прізвище: {{employee.surname}} |</p>
+                    <p class="content_bar_details"> Пошта: {{ employee.email }}</p>
+                </div>
+                {% if employee.is_owner %}
+                <div class="content_bar_details owner">Власник</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<p id="currentEmployee_email">
+    {{current_employee.email}}
+</p>
+<script>
+
+
+    function logout() {
+        document.cookie = "email_courseWork=";
+        window.location.href = '/login'
+    }
+
+    function removeEmployeePage() {
+        window.location.href = '/removeEmployee'
+    }
+
+    function toggleTransactionsList() {
+        var transactionList = document.querySelector('.transaction_list');
+        var currentDisplay = window.getComputedStyle(transactionList).display;
+        transactionList.style.display = currentDisplay === 'none' || currentDisplay === '' ? 'block' : 'none';
+    }
+
+    function toggleEmployeesList() {
+        var employeeList = document.querySelector('.employee_list');
+        var currentDisplay = window.getComputedStyle(employeeList).display;
+        employeeList.style.display = currentDisplay === 'none' || currentDisplay === '' ? 'block' : 'none';
+    }
+
+    function addEmployeePage() {
+        window.location.href = '/addEmployee'
+    }
+
+    function transactionPage() {
+        window.location.href = '/transaction'
+    }
+
+    function getReportPage() {
+        window.location.href = '/reportPage'
+    }
+
+    async function setCookie() {
+        const variableName = "email_courseWork";
+        const currentEmployeeEmail = document.getElementById("currentEmployee_email");
+
+        if (currentEmployeeEmail) {
+            const variableValue = currentEmployeeEmail.textContent.trim();
+            document.cookie = variableName + "=" + variableValue;
+        }
+
+    }
+
+    window.onload = setCookie;
+</script>
+</body>
+
+</html>

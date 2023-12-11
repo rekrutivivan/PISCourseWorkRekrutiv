@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>User Registration Form</title>
+
+    <style>
+        body {
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            width: 80%; /* Adjust the width as needed */
+            max-width: 400px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-top: 10px;
+        }
+
+        input,
+        select,
+        textarea {
+            margin-bottom: 10px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .checkbox-group {
+            margin-bottom: 10px;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .checkbox-group input {
+            margin-right: 5px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border: 1px solid #f5c6cb;
+            border-radius: 3px;
+            margin-bottom: 10px;
+        }
+
+        .success_alertDisplay {
+            color: #181616;
+            background-color: #28a745;
+            padding: 10px;
+            border: 1px solid #54913a;
+            border-radius: 3px;
+            margin-bottom: 10px;
+        }
+
+        #submit {
+            margin: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>Реєстрація працівника</h1>
+    {% if success_message %}
+    <div class="success_alertDisplay">
+        <ul>
+            <li>{{ success_message }}</li>
+        </ul>
+    </div>
+    {% endif %}
+    {% if message %}
+    <div class="alert alert-danger" id="alert-danger">
+        <li>{{ message }}</li>
+    </div>
+    {% endif %}
+
+    <form action="/addEmployee" id="userRegistration" method="post">
+        <label for="name">Ім'я:</label>
+        <input id="name" name="name" required type="text">
+
+        <label for="surname">Прізвище:</label>
+        <input id="surname" name="surname" required type="text">
+
+        <label for="email">Електронна пошта:</label>
+        <input id="email" name="email" required type="email">
+
+        <label for="password">Пароль:</label>
+        <input id="password" name="password" required type="password">
+
+        <label for="repeatPassword">Повторіть пароль:</label>
+        <input id="repeatPassword" name="repeatPassword" required type="password">
+
+        <label for="viewTransactions">Переглядати Транзакції:</label>
+        <select id="viewTransactions" name="viewTransactions" required>
+            <option value="Yes">Так</option>
+            <option value="No">Ні</option>
+        </select>
+
+        <label for="generateReport">Створювати звіт:</label>
+        <select id="generateReport" name="generateReport" required>
+            <option value="Yes">Так</option>
+            <option value="No">Ні</option>
+        </select>
+
+        <label for="createTransactions">Створювати Транзакції:</label>
+        <select id="createTransactions" name="createTransactions" required>
+            <option value="Yes">Так</option>
+            <option value="No">Ні</option>
+        </select>
+    </form>
+
+
+    <button id="submit" onclick="validateForm()" type="button">Зареєструвати</button>
+    <div class="error-message" id="passwordMismatch"></div>
+    </form>
+    {% if show_back_button %}
+    <button class="return-to-login" onclick="returnToHomePage()">Повернутись до головної сторінки</button>
+    {% endif %}
+</div>
+
+<script>
+    function returnToHomePage() {
+        window.location.href = '/home';
+    }
+
+    function validateForm() {
+        var password = document.getElementById('password').value;
+        var repeatPassword = document.getElementById('repeatPassword').value;
+        var passwordMismatch = document.getElementById('passwordMismatch');
+
+        if (password !== repeatPassword) {
+            passwordMismatch.textContent = 'Паролі не співпадають.';
+        } else {
+            passwordMismatch.textContent = '';
+            document.getElementById('userRegistration').submit();
+        }
+    }
+</script>
+
+</body>
+
+</html>

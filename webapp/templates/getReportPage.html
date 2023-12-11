@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Your Web Application</title>
+
+    <style>
+        .button-container {
+            text-align: center;
+            padding-top: 20px;
+        }
+
+        .custom-button {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 8px 12px; /* Adjust the padding based on your preference */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 48%; /* Adjust the width based on your preference */
+            font-size: 14px; /* Adjust the font size based on your preference */
+        }
+
+        .custom-button:hover {
+            background-color: #45a049;
+        }
+
+        .smaller-button {
+            font-size: 12px; /* Adjust the font size for smaller text */
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        nav {
+            background-color: #4CAF50;
+            overflow: hidden;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            cursor: pointer;
+            margin-right: 20px;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+            background-color: #4CAF50;
+        }
+
+        nav a:hover {
+            background-color: #fff;
+            color: #4CAF50;
+        }
+
+        .content {
+            margin: 20px;
+        }
+
+        .block {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative; /* Make the block container relative */
+        }
+
+        .show-hide-btn {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            position: absolute; /* Make the button position absolute within the relative container */
+            top: 30px;
+            right: 10px;
+
+        }
+
+        .show-hide-btn:hover {
+            background-color: #45a049;
+        }
+
+        .block h2 {
+            margin-bottom: 10px; /* Add margin to the h2 element to provide space for the button */
+        }
+
+        @media only screen and (max-width: 600px) {
+            nav {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            nav a {
+                margin: 10px 0;
+            }
+        }
+
+        .content_bar {
+            display: flex;
+            justify-content: space-between;
+            border: #4CAF50 solid 5px;
+            margin: 5px;
+            padding: 5px;
+            padding-left: 10px;
+            padding-right: 10px;
+            border-radius: 10px;
+        }
+
+        .parameters_wrapper {
+            display: flex;
+        }
+
+        .content_bar_details {
+            padding-right: 5px;
+            padding-left: 5px;
+        }
+
+
+    </style>
+</head>
+
+<body>
+
+<nav>
+    <div>
+        <a onclick="homePage()">Назад</a>
+    </div>
+
+</nav>
+<div class="button-container">
+    <a class="custom-button smaller-button" onclick="createReport()">Створити звіт</a>
+</div>
+
+
+<div class="content">
+    <div class="block" id="ReportBlock">
+        <h2>Звіти</h2>
+        <button class="show-hide-btn" onclick="toggleReportsList()">Показати/Сховати звіти</button>
+        <div class="report_list">
+            {% for report in reports %}
+            <div class="content_bar ">
+                <div class="parameters_wrapper">
+                    <p class="content_bar_details">ID: {{ report.id }} |</p>
+                    <p class="content_bar_details">Назва: {{ report.name}} |</p>
+                    <p class="content_bar_details">Початок Дати: {{report.diagram_start_date}} |</p>
+                    <p class="content_bar_details">Кінець Дати: {{ report.diagram_end_date}} |</p>
+
+                </div>
+                <p class="content_bar_details">Тип діаграми: {{ report.diagram_type }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function toggleReportsList() {
+        var transactionList = document.querySelector('.report_list');
+        var currentDisplay = window.getComputedStyle(transactionList).display;
+        transactionList.style.display = currentDisplay === 'none' || currentDisplay === '' ? 'block' : 'none';
+    }
+
+    function createReport() {
+        window.location.href = '/addReport'
+    }
+
+
+    function homePage() {
+        window.location.href = '/home'
+    }
+</script>
+</body>
+
+</html>
